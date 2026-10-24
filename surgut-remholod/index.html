@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="ru" data-theme="repair">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#ffffff">
+<title>РемХолод — Ремонт холодильников и заправка автокондиционеров в Сургуте</title>
+<meta name="description" content="Чиним холодильники, есть выезд на дом. Пишите в WhatsApp, Telegram или ВКонтакте.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Manrope:wght@800&display=swap" rel="stylesheet">
+<style>
+/* Темы. Меняются атрибутом data-theme на <html>. Обе светлые:
+   repair — графит + сигнальный жёлтый, cleaning — глубокий зелёный + мятный. */
+:root,
+:root[data-theme="repair"] {
+  --bg: #f3f3f0;        /* фон страницы */
+  --paper: #ffffff;     /* шапка, карточки, квитанция; повторяется в <meta name="theme-color"> */
+  --ink: #1b2128;       /* текст */
+  --muted: #5e6771;
+  --line: #e1e1db;
+  --dots: #a7acb1;      /* точки в прайсе */
+  --soft: #ecebe5;      /* мягкая подложка: чипы, аватары, место под фото */
+  --tint: #fff2c6;      /* цветная плашка: карточка связи без фото */
+  --brand: #1b2128;     /* название, телефоны */
+  --mark: #f0b000;      /* звезда, метки, точки списков */
+  --btn: #ffc21a;       /* главная кнопка */
+  --btn-ink: #1b2128;
+  --btn-hover: #f5b500;
+}
+:root[data-theme="cleaning"] {
+  --bg: #eef5f1;
+  --paper: #ffffff;
+  --ink: #102f29;
+  --muted: #55706a;
+  --line: #d6e5de;
+  --dots: #9bb9af;
+  --soft: #dcefe6;
+  --tint: #d6f2e5;
+  --brand: #0d5a47;
+  --mark: #2bbd88;
+  --btn: #0d5a47;
+  --btn-ink: #ffffff;
+  --btn-hover: #0a4b3b;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { color-scheme: light; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: 80px; }
+body {
+  --shadow: 0 1px 2px rgb(16 28 24 / .05), 0 12px 32px -12px rgb(16 28 24 / .14);
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 17px/1.55 "Golos Text", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overflow-wrap: break-word;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+a:focus-visible { outline: 3px solid var(--mark); outline-offset: 3px; border-radius: 6px; }
+h1, h2, h3 { margin: 0; line-height: 1.2; }
+
+.wrap { width: 100%; max-width: 1176px; margin: 0 auto; padding: 0 16px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 50px; padding: 0 22px; border-radius: 14px;
+  font-size: 17px; font-weight: 600; line-height: 1.2;
+  text-decoration: none; white-space: nowrap;
+}
+.btn--primary { background: var(--btn); color: var(--btn-ink); }
+.btn--primary:hover { background: var(--btn-hover); }
+.btn--ghost { background: var(--paper); color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); }
+.btn--ghost:hover { box-shadow: inset 0 0 0 1.5px var(--muted); }
+
+.card { background: var(--paper); border-radius: 20px; box-shadow: var(--shadow); padding: 20px; }
+
+/* Связаться. Телефон: нижняя панель. Компьютер: верхняя полоса (ниже, в media). */
+.callbar {
+  position: fixed; z-index: 20; left: 0; right: 0; bottom: 0;
+  padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px));
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -8px 24px rgb(0 0 0 / .06);
+}
+.callbar__in { display: flex; align-items: center; gap: 8px; }
+.callbar__name, .callbar__links, .callbar__phone, .callbar__wide { display: none; }
+.callbar .btn { flex: 1 1 0; min-width: 0; padding: 0 12px; }
+.callbar__call { flex-grow: 1.35; }
+body.has-bar { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+
+/* Шапка — белая полоса первого экрана. На телефоне фото идёт сразу под заголовком
+   (порядок через display: contents), на компьютере — справа от текста. */
+.hero { padding: 16px 0 40px; background: var(--paper); }
+.hero__grid { display: flex; flex-direction: column; gap: 28px; container-type: inline-size; }
+.hero__text { min-width: 0; }
+.hero--photo .hero__grid { gap: 0; }
+.hero--photo .hero__text { display: contents; }
+.hero--photo .hero__photo { order: 3; margin-top: 22px; }
+.hero--photo .hero__sub,
+.hero--photo .hero__meta,
+.hero--photo .facts { order: 4; }
+.hero--photo .hero__sub { margin-top: 20px; }
+
+.hero__name {
+  margin: 0 0 20px; padding-bottom: 14px; border-bottom: 1px solid var(--line);
+  font: 800 28px/1.12 "Manrope", "Golos Text", sans-serif;
+  letter-spacing: -0.02em; color: var(--brand);
+  overflow-wrap: anywhere;
+}
+/* Кегль от ширины колонки (--nl — длина названия, --lw — самого длинного слова):
+   короткое название — крупно в одну строку, длинное — в две строки помельче,
+   самое длинное слово всегда влезает в строку. */
+@supports (width: 1cqi) {
+  .hero__name {
+    font-size: clamp(20px, min(max(min(100cqi / (var(--nl, 20) * 0.56), 34px), min(200cqi / (var(--nl, 20) * 0.62), 28px)), 100cqi / (var(--lw, 10) * 0.7)), 34px);
+  }
+}
+.hero__headline { font-size: clamp(26px, 7.4vw, 31px); font-weight: 700; line-height: 1.14; letter-spacing: -0.022em; text-wrap: balance; }
+.hero__sub { margin: 12px 0 0; color: var(--muted); font-size: 17px; line-height: 1.5; max-width: 46ch; }
+
+.hero__meta { display: grid; justify-items: start; gap: 8px; margin-top: 20px; font-size: 15px; line-height: 1.4; }
+.rating { display: inline-flex; align-items: baseline; gap: 6px; text-decoration: none; }
+.rating__star { color: var(--mark); width: 15px; text-align: center; }
+.rating__value { font-weight: 700; }
+.rating__count { color: var(--muted); }
+.rating__count::before { content: "·"; margin-right: 6px; }
+.rating:hover .rating__count { text-decoration: underline; }
+.where { display: flex; gap: 6px; margin: 0; }
+.where__pin { flex: none; width: 15px; height: 15px; margin-top: 2px; fill: var(--mark); }
+.where__note { display: block; color: var(--muted); font-size: inherit; }
+
+.facts { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; line-height: 1.3; }
+.facts li { display: flex; align-items: center; gap: 7px; padding: 6px 12px 6px 10px; border-radius: 999px; background: var(--paper); box-shadow: inset 0 0 0 1px var(--line); }
+.facts li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--mark); flex: none; }
+
+/* Фото в шапке целиком, в своих пропорциях (--r = ширина / высота): высота не больше --hmax,
+   ширина по снимку. Место под фото известно до загрузки — страница не прыгает. */
+.hero__photo { margin: 0; display: flex; justify-content: center; min-width: 0; }
+.hero__photo img { --hmax: min(420px, 58vh); width: min(100%, calc(var(--hmax) * var(--r, 1.5))); height: auto; border-radius: 20px; background: var(--soft); box-shadow: var(--shadow); }
+
+/* Без фото: цветная карточка связи с телефонами, графиком и мессенджерами. */
+.hero__card { display: grid; gap: 18px; align-content: start; background: var(--tint); box-shadow: none; }
+.card__label { margin: 0 0 4px; color: var(--muted); font-size: 14px; line-height: 1.4; }
+.phones { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.phones a { font-size: 22px; font-weight: 700; line-height: 1.35; text-decoration: none; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--brand); }
+.phones a:hover { text-decoration: underline; }
+.hero__card .phones li:first-child a { font-size: 26px; }
+.schedule { border-collapse: collapse; }
+.schedule th { text-align: left; vertical-align: top; font-weight: 400; color: var(--muted); padding: 2px 18px 2px 0; white-space: nowrap; }
+.schedule td { padding: 2px 0; font-variant-numeric: tabular-nums; }
+/* Оговорка 2ГИС к графику («по предварительной записи») — как комментарий к адресу: мельче и приглушённо.
+   Если таблицы нет, оговорка и есть график — тогда обычным текстом. */
+.schedule-note { margin: 4px 0 0; max-width: 36ch; color: var(--muted); font-size: 15px; line-height: 1.4; }
+.card__label + .schedule-note,
+.schedule-box > .schedule-note:first-child { margin-top: 0; color: var(--ink); font-size: 17px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+.chip {
+  display: inline-flex; align-items: center; min-height: 42px; padding: 0 18px;
+  border-radius: 999px; background: var(--soft);
+  text-decoration: none; font-size: 15px; font-weight: 600;
+}
+.hero__card .chip { background: var(--paper); }
+.chip:hover { box-shadow: inset 0 0 0 1.5px var(--brand); }
+
+/* Секции */
+.section { padding: 48px 0; }
+.section__title { font-size: 28px; font-weight: 700; letter-spacing: -0.018em; margin-bottom: 20px; }
+.section__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 24px; margin-bottom: 20px; }
+.section__head .section__title { margin: 0; }
+.section--prices { padding-top: 40px; }
+/* Полосы чередуются: первая секция (квитанция) на цветном фоне — так видна перфорация,
+   дальше белая, цветная и т. д. На белой полосе карточки отзывов цветные, без тени. */
+main > .section:nth-child(even) { background: var(--paper); }
+main > .section:nth-child(even) .review { background: var(--bg); box-shadow: none; }
+main > .section:nth-child(even) .review__ava { background: var(--paper); }
+.about { margin: 0; font-size: 18px; line-height: 1.6; max-width: 60ch; }
+
+/* Прайс-квитанция — главный узнаваемый элемент шаблона */
+.prices { display: grid; gap: 28px; }
+.ticket {
+  max-width: 700px;
+  filter: drop-shadow(0 1px 1px rgb(16 28 24 / .08)) drop-shadow(0 12px 22px rgb(16 28 24 / .08));
+}
+.ticket__paper {
+  --hole: 7px;
+  background: var(--paper);
+  padding: 32px 18px 26px;
+  -webkit-mask:
+    radial-gradient(circle var(--hole) at 50% 0, #0000 98%, #000) 50% 0 / 22px 51% repeat-x,
+    radial-gradient(circle var(--hole) at 50% 100%, #0000 98%, #000) 50% 100% / 22px 51% repeat-x;
+          mask:
+    radial-gradient(circle var(--hole) at 50% 0, #0000 98%, #000) 50% 0 / 22px 51% repeat-x,
+    radial-gradient(circle var(--hole) at 50% 100%, #0000 98%, #000) 50% 100% / 22px 51% repeat-x;
+}
+.ticket__head { padding-bottom: 14px; margin-bottom: 4px; border-bottom: 2px dashed var(--line); }
+.ticket__head h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.018em; }
+.ticket__meta { margin: 4px 0 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
+.ticket__cat { margin: 18px 0 0; font-size: 14px; font-weight: 600; line-height: 1.4; color: var(--muted); }
+.ticket__cat::first-letter,
+.ticket__name::first-letter { text-transform: uppercase; }
+.ticket__list { list-style: none; margin: 0; padding: 0; }
+/* Цена стоит на одной линии с последней строкой услуги. Точки — фон по нижней строке,
+   прижатый к цене (у цены всегда целая точка); текст услуги закрывает их белым фоном. */
+.ticket__row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; column-gap: 8px;
+  padding: 7px 0; font-size: 16px; line-height: 1.4;
+}
+.ticket__name {
+  min-width: 0; overflow-wrap: anywhere;
+  background: radial-gradient(circle, var(--dots) 1.1px, #0000 1.6px) right 0 bottom 0.3em / 6px 3px repeat-x;
+}
+.ticket__name > span {
+  padding-right: 8px; background: var(--paper);
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.ticket__price { white-space: nowrap; text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ticket__from { font-weight: 400; color: var(--muted); }
+.ticket__note { grid-column: 1 / -1; margin-top: 1px; color: var(--muted); font-size: 13px; line-height: 1.4; }
+.ticket__foot { margin: 16px 0 0; padding-top: 14px; border-top: 2px dashed var(--line); color: var(--muted); font-size: 13px; line-height: 1.45; }
+
+/* Фото целиком, без обрезки. Телефон: лента с прокруткой вбок, высота одна, ширина по пропорциям
+   (широкие снимки ужимаются по ширине экрана). Компьютер: ряды из шаблона, каждый во всю ширину. */
+.gallery {
+  display: flex; align-items: center; gap: 10px;
+  overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none;
+  margin: 0 -16px; padding: 2px 16px 6px; scroll-padding: 0 16px;
+}
+.gallery::-webkit-scrollbar { display: none; }
+.gallery__row { display: contents; }
+.gallery__item { flex: none; display: block; scroll-snap-align: start; border-radius: 14px; overflow: hidden; background: var(--soft); }
+.gallery__item img { width: min(100vw - 72px, 300px * var(--r, 1)); height: auto; }
+
+/* Отзывы: автор и дата сверху, как в 2ГИС */
+.rating--big { font-size: 16px; }
+.rating--big .rating__star { width: auto; font-size: 20px; }
+.rating--big .rating__value { font-size: 22px; letter-spacing: -0.01em; }
+.reviews { display: grid; gap: 14px; }
+.review { margin: 0; display: flex; flex-direction: column; gap: 12px; background: var(--paper); border-radius: 20px; padding: 18px 20px 20px; box-shadow: var(--shadow); }
+.review p { margin: 0; overflow-wrap: anywhere; white-space: pre-line; }
+.review footer { display: flex; align-items: center; gap: 12px; font-size: 14px; line-height: 1.35; }
+.review__ava { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--soft); color: var(--brand); font-size: 16px; font-weight: 700; }
+.review__who { display: grid; }
+.review__who > span:first-child { font-size: 15px; font-weight: 600; }
+.review__date { color: var(--muted); }
+.link { display: inline-block; margin-top: 18px; font-weight: 600; color: var(--brand); }
+
+/* Контакты. Телефон: карточка, под ней карта. Компьютер: карточка лежит на карте слева. */
+.contacts { display: grid; gap: 16px; }
+.contacts__info { display: grid; gap: 18px; align-content: start; justify-items: start; }
+.contacts__addr { margin: 0; font-size: 19px; font-weight: 600; line-height: 1.4; }
+.contacts__addr small { display: block; margin-top: 2px; color: var(--muted); font-size: 15px; font-weight: 400; }
+.contacts__map { position: relative; min-width: 0; border-radius: 20px; overflow: hidden; background: var(--soft); }
+.contacts__map iframe { display: block; width: 100%; aspect-ratio: 4 / 3; border: 0; }
+.map-tap { display: none; }
+.map-links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: -4px 0 0; font-size: 15px; }
+
+/* Подвал */
+.footer { padding: 28px 0 36px; border-top: 1px solid var(--line); }
+.demo-note { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; max-width: 70ch; }
+
+/* На сенсорных экранах карта не перехватывает прокрутку страницы: касание открывает 2ГИС. */
+@media (hover: none) and (pointer: coarse) {
+  .map-tap { display: block; position: absolute; inset: 0; }
+}
+
+@media (min-width: 760px) {
+  .wrap { padding: 0 24px; }
+
+  .callbar {
+    position: sticky; top: 0; bottom: auto;
+    padding: 12px 0;
+    background: rgb(255 255 255 / .94);
+    -webkit-backdrop-filter: saturate(1.4) blur(12px); backdrop-filter: saturate(1.4) blur(12px);
+    border-top: 0; border-bottom: 1px solid var(--line);
+    box-shadow: none;
+  }
+  .callbar__in { gap: 12px; }
+  /* Название — словесный знак. Длинное (до 80 знаков) мельче и не больше чем в две строки. */
+  .callbar__name {
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+    flex: 1 1 auto; min-width: 0; margin-right: 8px;
+    font: 800 clamp(15px, 900px / var(--nl, 20), 20px)/1.25 "Manrope", "Golos Text", sans-serif; letter-spacing: -0.02em; color: var(--brand);
+  }
+  .callbar__phone {
+    margin-right: 6px;
+    font-size: 18px; font-weight: 700; text-decoration: none; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .callbar__phone:hover { text-decoration: underline; }
+  .callbar .btn { flex: none; min-height: 44px; padding: 0 18px; font-size: 16px; border-radius: 12px; }
+  body.has-bar { padding-bottom: 0; }
+  /* Название уже в верхней полосе — в шапке не повторяем. */
+  body.has-bar .hero__name { display: none; }
+
+  .hero { padding: 48px 0 64px; }
+  .hero__name { border-bottom: 0; padding-bottom: 0; }
+
+  .gallery { display: grid; gap: 14px; overflow: visible; margin: 0; padding: 0; }
+  /* Ширина фото пропорциональна --r, поэтому высоты в ряду равны. Если ряд вышел бы выше 560 px
+     (одно-два вертикальных фото), он сужается и встаёт по центру. */
+  .gallery__row { display: flex; gap: 14px; width: 100%; max-width: calc(var(--sum) * 560px + (var(--n) - 1) * 14px); margin: 0 auto; }
+  .gallery__item { flex: calc(var(--r) * 100) 1 0%; min-width: 0; } /* ×100: при сумме меньше 1 flex-grow не заполнил бы ряд */
+  .gallery__item img { width: 100%; }
+
+  .reviews--n2, .reviews--n3, .reviews--n4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .reviews--n3 .review:last-child { grid-column: 1 / -1; }
+  .reviews--n1 { max-width: 720px; }
+
+  /* Карточка и карта в одной клетке сетки: карточка сверху слева, карта на всю ширину. */
+  .contacts--map { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .contacts--map .contacts__info,
+  .contacts--map .contacts__map { grid-area: 1 / 1; }
+  .contacts--map .contacts__info { z-index: 1; align-self: start; justify-self: start; width: min(380px, 42%); margin: 24px; padding: 26px 28px 28px; }
+  .contacts--map .contacts__map { min-height: 460px; }
+  .contacts--map .contacts__map iframe { position: absolute; inset: 0; height: 100%; aspect-ratio: auto; }
+  .map-links { margin: 0; }
+  .contacts:not(.contacts--map) .contacts__info { grid-template-columns: repeat(auto-fit, minmax(200px, max-content)); column-gap: 56px; align-items: start; padding: 28px; }
+
+  .ticket__paper { padding: 38px 36px 30px; }
+  .ticket__row { font-size: 17px; column-gap: 10px; }
+}
+
+@media (min-width: 900px) {
+  .hero { padding: 64px 0 88px; }
+  .hero__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 64px; align-items: center; }
+  .hero--tall .hero__grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
+  .hero--photo .hero__grid { gap: 64px; }
+  .hero--photo .hero__text { display: block; }
+  .hero--photo .hero__photo { margin-top: 0; }
+  .hero--card .hero__grid { grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.7fr); align-items: start; }
+  .hero--text .hero__grid { grid-template-columns: minmax(0, 860px); }
+  .hero__name { font-size: clamp(30px, min(max(min(100cqi / (var(--nl, 20) * 0.56), 52px), min(200cqi / (var(--nl, 20) * 0.62), 40px)), 100cqi / (var(--lw, 10) * 0.7)), 52px); }
+  .hero__headline { font-size: clamp(36px, 3.8vw, 50px); line-height: 1.08; }
+  .hero__sub, .hero--photo .hero__sub { font-size: 19px; margin-top: 18px; }
+  .hero__meta, .facts { font-size: 16px; }
+  .facts { gap: 8px; }
+  .facts li { padding: 7px 14px 7px 12px; }
+  .hero__meta { margin-top: 26px; }
+  .hero__photo { justify-content: flex-end; }
+  .hero__photo img { --hmax: 520px; border-radius: 24px; }
+  .hero__card { padding: 28px 30px 30px; border-radius: 24px; }
+
+  .section { padding: 72px 0; }
+  .section__title { font-size: 34px; margin-bottom: 26px; }
+  .section__head { margin-bottom: 26px; }
+
+  .prices--aside { grid-template-columns: minmax(0, 680px) minmax(0, 1fr); gap: 64px; align-items: start; }
+  .prices--aside .about { padding-top: 48px; font-size: 20px; }
+  .prices--aside .about::before { content: ""; display: block; width: 48px; height: 4px; margin-bottom: 18px; border-radius: 2px; background: var(--mark); }
+}
+
+@media (min-width: 1024px) {
+  .callbar__phone { display: inline; }
+  .reviews--n3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .reviews--n3 .review:last-child { grid-column: auto; }
+}
+
+@media (min-width: 1180px) {
+  .callbar__wide { display: inline; }
+  .callbar__links { display: flex; gap: 24px; margin-right: 18px; font-size: 15px; }
+  .callbar__links a { color: var(--muted); text-decoration: none; }
+  .callbar__links a:hover { color: var(--ink); }
+}
+
+</style>
+</head>
+<body class="has-bar">
+
+<nav class="callbar" aria-label="Связаться">
+  <div class="wrap callbar__in">
+    <span class="callbar__name" style="--nl: 8" data-src="name_short">РемХолод</span>
+    <span class="callbar__links"><a href="#photos">Фото</a><a href="#reviews">Отзывы</a><a href="#contacts">Контакты</a></span>
+    
+    <a class="callbar__phone" href="tel:+79120876462" data-src="phones.0.text">+7‒912‒087‒64‒62</a>
+    <a class="btn btn--primary callbar__call" href="tel:+79120876462">Позвонить</a>
+    
+    <a class="btn btn--ghost callbar__write" href="https://wa.me/79120876462" target="_blank" rel="noopener"><span><span class="callbar__wide">Написать в </span>WhatsApp</span></a>
+  </div>
+</nav>
+
+
+<header class="hero hero--photo hero--tall">
+  <div class="wrap hero__grid">
+    <div class="hero__text">
+      <p class="hero__name" style="--lw: 8; --nl: 8" data-src="name_short">РемХолод</p>
+      <h1 class="hero__headline" data-free="headline">Ремонт холодильников и заправка автокондиционеров в Сургуте</h1>
+      <p class="hero__sub" data-free="subheadline">Чиним холодильники, есть выезд на дом. Пишите в WhatsApp, Telegram или ВКонтакте.</p>
+
+      
+      <div class="hero__meta">
+        
+        <a class="rating" href="https://2gis.ru/surgut/firm/70000001070558001/tab/reviews" target="_blank" rel="noopener">
+          <span class="rating__star" aria-hidden="true">★</span>
+          <span class="rating__value" data-src="rating">4,7</span>
+          <span class="rating__count"><span data-src="reviews_count">22</span> отзыва в 2ГИС</span>
+        </a>
+        
+        
+      </div>
+      
+
+      
+      <ul class="facts">
+        <li data-src="attributes.0">Холодильники</li><li data-src="attributes.1">Выезд на дом</li><li data-src="attributes.2">Наличный расчёт</li><li data-src="attributes.3">Оплата эл.кошельком</li><li data-src="attributes.4">Перевод с карты</li>
+      </ul>
+      
+    </div>
+
+    
+    <figure class="hero__photo">
+      <img src="img/1.jpg" srcset="img/1-640.jpg 640w, img/1.jpg 1920w" sizes="(min-width: 900px) 640px, 100vw" width="1920" height="2560" style="--r: 0.75" alt="РемХолод" fetchpriority="high">
+    </figure>
+    
+  </div>
+</header>
+
+<main>
+  
+  <section class="section section--about">
+    <div class="wrap">
+      <p class="about" data-free="about">Чиним холодильники, обслуживаем климатическое оборудование и заправляем автокондиционеры. Есть выезд на дом.</p>
+    </div>
+  </section>
+  
+
+  
+  <section class="section section--photos" id="photos">
+    <div class="wrap">
+      <h2 class="section__title">Фото</h2>
+      <div class="gallery">
+        
+        <div class="gallery__row" style="--sum: 3.75; --n: 5">
+          
+          <a class="gallery__item" href="img/3.jpg" target="_blank" rel="noopener" style="--r: 0.75">
+            <img src="img/3-640.jpg" width="1920" height="2560" alt="Фото 1, РемХолод" loading="lazy">
+          </a>
+          
+          <a class="gallery__item" href="img/2.jpg" target="_blank" rel="noopener" style="--r: 0.75">
+            <img src="img/2-640.jpg" width="1920" height="2560" alt="Фото 2, РемХолод" loading="lazy">
+          </a>
+          
+          <a class="gallery__item" href="img/4.jpg" target="_blank" rel="noopener" style="--r: 0.75">
+            <img src="img/4-640.jpg" width="1920" height="2560" alt="Фото 3, РемХолод" loading="lazy">
+          </a>
+          
+          <a class="gallery__item" href="img/7.jpg" target="_blank" rel="noopener" style="--r: 0.75">
+            <img src="img/7-640.jpg" width="1920" height="2560" alt="Фото 4, РемХолод" loading="lazy">
+          </a>
+          
+          <a class="gallery__item" href="img/6.jpg" target="_blank" rel="noopener" style="--r: 0.75">
+            <img src="img/6-640.jpg" width="1920" height="2560" alt="Фото 5, РемХолод" loading="lazy">
+          </a>
+          
+        </div>
+        
+      </div>
+    </div>
+  </section>
+  
+
+  
+  <section class="section section--reviews" id="reviews">
+    <div class="wrap">
+      <div class="section__head">
+        <h2 class="section__title">Отзывы</h2>
+        
+        <a class="rating rating--big" href="https://2gis.ru/surgut/firm/70000001070558001/tab/reviews" target="_blank" rel="noopener">
+          <span class="rating__star" aria-hidden="true">★</span>
+          <span class="rating__value" data-src="rating">4,7</span>
+          <span class="rating__count"><span data-src="reviews_count">22</span> отзыва в 2ГИС</span>
+        </a>
+        
+      </div>
+      <div class="reviews reviews--n4">
+        
+        <blockquote class="review">
+          <footer>
+            <span class="review__ava" aria-hidden="true">Д</span>
+            <span class="review__who"><span data-src="reviews.2.author" data-author="1">Дмитрий К.</span><span class="review__date" data-src="reviews.2.date">19 июля 2024</span></span>
+          </footer>
+          <p data-src="reviews.2.text" data-review="1">Мастер отличный! Нашел утечку! Сказал лучше сначала устранить утечку, а потом уже заправляться! Спасибо за быструю диагностику</p>
+        </blockquote>
+        
+        <blockquote class="review">
+          <footer>
+            <span class="review__ava" aria-hidden="true">Н</span>
+            <span class="review__who"><span data-src="reviews.5.author" data-author="1">Наталья И.</span><span class="review__date" data-src="reviews.5.date">25 мая 2024</span></span>
+          </footer>
+          <p data-src="reviews.5.text" data-review="1">Все хорошо - мастер приехал быстро, диагностика, ремонт-цены демократичные 👌Рекомендую👍</p>
+        </blockquote>
+        
+        <blockquote class="review">
+          <footer>
+            <span class="review__ava" aria-hidden="true">А</span>
+            <span class="review__who"><span data-src="reviews.10.author" data-author="1">Анатолий Л.</span><span class="review__date" data-src="reviews.10.date">30 августа 2023</span></span>
+          </footer>
+          <p data-src="reviews.10.text" data-review="1">Был приятно удивлён оперативной работой сотрудников по замене компрессора. Сами купили запчасти, приехали и установили ПУ. Цены вполне адекватный</p>
+        </blockquote>
+        
+        <blockquote class="review">
+          <footer>
+            <span class="review__ava" aria-hidden="true">i</span>
+            <span class="review__who"><span data-src="reviews.3.author" data-author="1">ilil i.</span><span class="review__date" data-src="reviews.3.date">14 июля 2024</span></span>
+          </footer>
+          <p data-src="reviews.3.text" data-review="1">Созвонились, договорились. Подъехали, диагностику сделали. Посмотрели, подсказал куда смотреть. Проблема видимо с кондером. Советую 100% 👍</p>
+        </blockquote>
+        
+      </div>
+      <a class="link" href="https://2gis.ru/surgut/firm/70000001070558001/tab/reviews" target="_blank" rel="noopener">Все отзывы в 2ГИС</a>
+    </div>
+  </section>
+  
+
+  
+  <section class="section section--contacts" id="contacts">
+    <div class="wrap">
+      <h2 class="section__title">Контакты</h2>
+      <div class="contacts">
+        
+        <div class="contacts__info card">
+          
+          
+          
+          <ul class="phones">
+            <li><a href="tel:+79120876462" data-src="phones.0.text">+7‒912‒087‒64‒62</a></li><li><a href="tel:+73462980007" data-src="phones.1.text">+7 (3462) 98‒00‒07</a></li>
+          </ul>
+          
+          
+          <div class="schedule-box">
+          <table class="schedule">
+            
+            <tr><th>Каждый день</th><td data-src="schedule.Пн,schedule.Вт,schedule.Ср,schedule.Чт,schedule.Пт,schedule.Сб,schedule.Вс">09:00–21:00</td></tr>
+            
+          </table>
+          <p class="schedule-note" data-src="schedule_comment">по предварительному звонку</p>
+          </div>
+          
+          
+          <p class="chips"><a class="chip" href="https://vk.com/id795925039" target="_blank" rel="noopener">ВКонтакте</a><a class="chip" href="https://wa.me/79120876462" target="_blank" rel="noopener">WhatsApp</a><a class="chip" href="https://t.me/+79505345948" target="_blank" rel="noopener">Telegram</a></p>
+          
+          
+        </div>
+        
+        
+      </div>
+    </div>
+  </section>
+  
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p class="demo-note">Демо-концепт сайта, подготовлен по открытым данным 2ГИС. Это не официальный сайт компании. Удалим по первой просьбе. Связь: <a href="https://t.me/lllA1exlll" target="_blank" rel="noopener">Telegram @lllA1exlll</a>.</p>
+  </div>
+</footer>
+</body>
+</html>
